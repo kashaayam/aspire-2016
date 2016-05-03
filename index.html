@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Aspire!</title>
+	    <meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    	<!-- Latest compiled and minified CSS for BootStrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	</head>
+	<body>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript for BootStrap -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	<!-- Load AWS SDK for the browser -->
+	<script src="aws/aws-cognito-sdk.min.js"></script>
+	<script src="aws/amazon-cognito-identity.min.js"></script>
+	<script src="https://sdk.amazonaws.com/js/aws-sdk-2.3.7.min.js"></script>
+	<script src="jsbn/jsbn.js"></script>
+	<script src="jsbn/jsbn2.js"></script>
+	<script src="sjcl/sjcl.js"></script>
+	<script src="momentjs/moment.min.js"></script>
+	
+
+	<nav class="navbar navbar-default">
+		<div class="container">
+		  <div class="navbar-header">
+		    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+		      <span class="sr-only">Toggle navigation</span>
+		      <span class="icon-bar"></span>
+		      <span class="icon-bar"></span>
+		      <span class="icon-bar"></span>
+		    </button>
+		    <a class="navbar-brand" href="#">ASPIRE</a>
+		  </div>
+		  <div class="navbar-collapse collapse">
+		    <ul class="nav navbar-nav">
+		      <li class="active"><a href="#">Home</a></li>
+		      <li><a href="#about">About</a></li>
+		      <li><a href="#contact">Contact</a></li>
+		    </ul>
+		  </div><!--/.nav-collapse -->
+		</div>
+	</nav>
+
+
+    <div class="container theme-showcase">
+
+      <div class="jumbotron">
+        <h1>Welcome!</h1>
+        <p class="lead">Your journey of a thousand miles starts right here.</p>
+      </div>
+
+     	<div class="col-md-12">
+	      <table class="table">
+	        <tbody>
+	          <tr>
+	            <td><button type="button" class="btn btn-lg btn-primary" id="signupbutton">Sign Up</button></td>
+	            <td align="right"><button type="button" class="btn btn-lg btn-success" id="signinbutton">Sign In</button></td>
+	          </tr>
+	          <tr>
+	          	<td colspan=2>
+	          		<div hidden id='signupsuccess'>
+	          			<p style='color:green'>Signup successful. Please provide the confirmation code sent to your email.</p>
+	          		</div>
+	          		<div hidden id='signupfailure'>
+	          			<p style='color:red' id='signup-failure-error-text'>Signup failed.</p>
+	          		</div>
+					<div hidden id="signupdiv">
+		          		<form class="form-signin">
+		          		        <h2 class="form-signin-heading">Please sign up</h2>
+		          		        <label for="signup-username" class="sr-only">User Name</label>
+		          		        <input type="text" id="signup-username" class="form-control" placeholder="User Name <visible to others>" required autofocus>
+		          		        <label for="signup-email" class="sr-only">Email address</label>
+		          		        <input type="email" id="signup-email" class="form-control" placeholder="Email address" required autofocus>
+		          		        <label for="signup-password" class="sr-only">Password</label>
+		          		        <input type="password" id="signup-password" class="form-control" placeholder="Password" required>
+		          		        <label for="signup-password-confirm" class="sr-only">Confirm Password</label>
+		          		        <input type="password" id="signup-password-confirm" class="form-control" placeholder="Retype Password" required>
+		          		        <button class="btn btn-lg btn-primary btn-block" id='signup-submit-button' type="submit">Sign up</button>
+		          		</form>
+	          		</div>
+	          		<div hidden id='verifyemailsuccess'>
+	          			<p style='color:green'>Email confirmed. Signup complete. Please sign in to start your journey.</p>
+	          		</div>
+	          		<div hidden id='verifyemailfailure'>
+	          			<p style='color:red' id='email-verification-failure-text'>Email confirmation failed. Signup not complete.</p>
+	          		</div>
+					<div hidden id="verifyemaildiv">
+		          		<form class="form-signin">
+		          		        <h2 class="form-signin-heading">Email confirmation</h2>
+		          		        <label for="confirmation-code" class="sr-only">Confirmation code</label>
+		          		        <input type="text" id="confirmation-code" class="form-control" placeholder="Type 6-digit confirmation code" required autofocus>
+		          		        <button class="btn btn-lg btn-primary btn-block" id='verify-email-submit-button' type="submit">Confirm Email</button>
+		          		</form>
+	          		</div>
+	          		<div hidden id='signinfailure'>
+	          			<p style='color:red' id='signin-failure-error-text'>Signin failed.</p>
+	          		</div>
+	          		<div hidden id="signindiv">
+		          		<form class="form-signin">
+		          		        <h2 class="form-signin-heading">Please sign in</h2>
+		          		        <label for="signin-username" class="sr-only">User name</label>
+		          		        <input type="email" id="signin-username" class="form-control" placeholder="User name" required autofocus>
+		          		        <label for="signin-password" class="sr-only">Password</label>
+		          		        <input type="password" id="signin-password" class="form-control" placeholder="Password" required>
+		          		        <div class="checkbox">
+		          		          <label>
+		          		            <input type="checkbox" value="remember-me"> Remember me
+		          		          </label>
+		          		        </div>
+		          		        <button class="btn btn-lg btn-primary btn-block" id='signin-submit-button' type="submit">Sign in</button>
+		          		</form>
+	          		</div>
+	          		<div hidden id='signinsuccess'>
+	          			<p style='color:green' id='signin-success-text'>Signin successful. redirecting you in...</p>
+	          			<p style='color:green' id='signin-success-countdown'>5</p>
+	          		</div>
+	          	</td>
+	          </tr>
+	        </tbody>
+	      </table>
+	      <hr>
+		</div>
+	</div><!-- /.container -->
+
+			
+
+	<script>
+
+	AWS.config.region = 'us-east-1';
+	AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    	IdentityPoolId: 'us-east-1:1f8ad555-8722-4f0d-8fe5-a5a9de07e9d4',
+	});
+
+	AWSCognito.config.region = 'us-east-1';
+	AWSCognito.config.credentials = new AWS.CognitoIdentityCredentials({
+    	IdentityPoolId: 'us-east-1:1f8ad555-8722-4f0d-8fe5-a5a9de07e9d4',
+	});
+
+	//var cisp = new AWS.CognitoIdentityServiceProvider();
+	var userPoolData = { UserPoolId : 'us-east-1_1s3kTpidh',
+                ClientId : '5elr22vddej0s7vm26fnepocss'
+    };
+
+    var userPool = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(userPoolData);
+
+	$('#signupbutton').click(function(){
+		$("#signupsuccess").hide();
+		$("#signupfailure").hide();
+		$("#verifyemailsuccess").hide();
+		$("#verifyemailsfailure").hide();
+		$("#verifyemaildiv").hide();
+		$("#signindiv").hide();
+		$('#signupdiv').show();
+	});
+
+	$('#signinbutton').click(function(){
+		$("#signupsuccess").hide();
+		$("#signupfailure").hide();
+		$('#verifyemailsuccess').hide();
+		$("#verifyemailsfailure").hide();
+		$("#verifyemaildiv").hide();
+		$('#signupdiv').hide();
+		$('#signindiv').show();
+		
+
+	});
+
+	function doSignup(e){
+		e.preventDefault();
+		if ((($('#signup-password').val())) === ($('#signup-password-confirm').val())){
+			$('#signupfailure').hide();
+			/*var params = {
+			  ClientId: '5elr22vddej0s7vm26fnepocss', // required
+			  Password: $('#signup-password').val(), // required 
+			  Username: $('#signup-username').val(), // required 
+			  SecretHash: null,
+			  UserAttributes: [
+			  {
+			  	Name: "email",
+			  	Value: $('#signup-email').val()
+			  }]
+			};
+			cisp.signUp(params, function(err, data) {
+			*/
+
+			var attributeList = [];
+			var emailInfo = {
+			  	Name: "email",
+			  	Value: $('#signup-email').val()				
+			};
+			var attributeEmail = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserAttribute(emailInfo);
+			attributeList.push(attributeEmail);
+
+			userPool.signUp($('#signup-username').val(),$('#signup-password').val(),attributeList,null,function(err, result){
+			  if (err) {
+			  	console.log(err, err.stack); // an error occurred
+			  		$('#signup-failure-error-text').text("Signup failed. "+err);
+    				$('#signupfailure').show();
+			  }
+			  else{
+			  		cognitoUser = result.user;
+			  	    console.log("call result " + result);           // successful response
+			  	    console.log('User name is ' + cognitoUser.getUsername());
+			  	    // Now ask for email verification
+	  	    		$('#signupdiv').hide();
+    				$('#signupfailure').hide();
+    				$('#signupsuccess').show();
+    				$('#verifyemaildiv').show();
+			  } 
+			});
+		}
+		else{
+			$('#signupfailure').show();
+			$('#signup-failure-error-text').text("Passwords do not match. Please fix.");
+		}
+		//return false;
+	}
+	//$('#signup-submit-button').submit(doSignup);
+	$('#signup-submit-button').click(doSignup);
+
+
+	function doVerifyEmail(e){
+		e.preventDefault();
+		
+		$('#signupsuccess').hide();
+
+		/*
+		var params = {
+		  ClientId: '5elr22vddej0s7vm26fnepocss', // required
+		  ConfirmationCode: $('#confirmation-code').val(), // required
+		  Username: $('#signup-username').val(), // LETS TRY THIS JUST ONCE $('#signup-username').val(), // required
+		  ForceAliasCreation: false,
+		  SecretHash: null
+		};
+
+		cisp.confirmSignUp(params, function(err, data) {
+		*/
+		
+		cognitoUser.confirmRegistration($('#confirmation-code').val(), false, function(err, result) {
+		  if (err) {
+		  	console.log(err, err.stack); // an error occurred
+		  	$('#email-verification-failure-text').text("Verification failed. "+err);
+		  	$('#verifyemailfailure').show();
+		  }
+		  else {
+		  	    console.log("call result " + result);           // successful response
+		  	    // Now ask for email verification
+			  	$('#verifyemailfailure').hide();
+   				$('#verifyemaildiv').hide();
+		  		$('#verifyemailsuccess').show();
+		  } 
+		});
+		//return false;
+	}
+
+	$('#verify-email-submit-button').click(doVerifyEmail);
+
+	function doSignin(e){
+		e.preventDefault();
+
+		var authenticationData = {
+			Username: $('#signin-username').val(),
+			Password: $('#signin-password').val()
+		}
+	    var authenticationDetails = new AWSCognito.CognitoIdentityServiceProvider.AuthenticationDetails(authenticationData);
+
+	    var userPoolData = { UserPoolId : 'us-east-1_1s3kTpidh',
+                ClientId : '5elr22vddej0s7vm26fnepocss'
+    	};
+
+    	var userPool = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(userPoolData);
+    
+		var userData = {
+	        Username : $('#signin-username').val(),
+	        Pool : userPool
+	    };
+
+
+	    var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
+	    cognitoUser.authenticateUser(authenticationDetails, {
+	        onSuccess: function (result) {
+   				$('#signinfailure').hide();
+	        	var userAccessToken = result.getAccessToken().getJwtToken();
+	            console.log('access token + ' + userAccessToken);
+	            $('#signindiv').hide();
+	            $('#signinsuccess').show();
+	            var count = 5;
+				setInterval(function(){
+				    count--;
+				    $('#signin-success-countdown').text(count);
+				    if (count == 0) {
+				        window.location = 'aspire-landing.html'; 
+				    }
+				},1000);
+	        },
+
+	        onFailure: function(err) {
+		  		$('#signin-failure-error-text').text("Signin failed. "+err);
+   				$('#signinfailure').show();
+	            console.log(err, err.stack);
+	        },
+
+	    });
+	    //prompt("Trying to log in with "+ $('#signin-username').val() + " and password " + $('#signin-password').val());
+
+		}
+
+	$('#signin-submit-button').click(doSignin);
+	</script>
+
+
+	</body>
+</html>
