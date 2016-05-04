@@ -108,8 +108,30 @@
             else{
             	console.log('session validity: ' + session.isValid());
             	var userAccessToken = session.getAccessToken().getJwtToken();
-	            console.log('access token + ' + userAccessToken);
+            	var expirationTime = session.getAccessToken().getExpiration();
+	            console.log('access token + ' + userAccessToken + " expires in " + expirationTime);
 	            $('#signinsuccess').show();
+	            // Identity pool already configured to use roles
+				var creds = new AWS.CognitoIdentityCredentials({
+				    IdentityPoolId: 'us-east-1:1f8ad555-8722-4f0d-8fe5-a5a9de07e9d4',
+				    Logins: {
+					'cognito-idp.us-east-1.amazonaws.com/1s3kTpidh': userAccessToken
+					}
+				})
+				 
+				AWS.config.update({
+				    region: 'us-east-1',
+				    credentials: creds
+				});
+				console.log("creds = ",creds);
+				console.log("identityId = ",creds.identityId);
+				creds.refresh(function() {
+					 // IdentityId available now
+					console.log("creds = ",creds);
+					console.log("identityId = ",creds.identityId);
+				});
+								
+
         	}
         });
     } 
